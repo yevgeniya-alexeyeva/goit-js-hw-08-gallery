@@ -14,15 +14,16 @@ const closeModal = () => {
   ref.modal.classList.remove("is-open");
   clearModalImgSrc();
 };
+const closeModalByEscape = (event) => {
+  if (event.code === "Escape") closeModal();
+};
 const setModalImgSrc = (bigImageURL) => {
   if (ref.modal.classList.contains("is-open"))
     ref.modalImage.setAttribute("src", bigImageURL);
-  console.log("setModal");
 };
 const clearModalImgSrc = (bigImageURL) => {
   if (!ref.modal.classList.contains("is-open"))
     ref.modalImage.setAttribute("src", "");
-  console.log("clearModal");
 };
 
 galleryItems.map((galleryItem) => {
@@ -51,6 +52,29 @@ const getBigImage = (event) => {
   openModal();
   setModalImgSrc(bigImageURL);
 };
+const leafImages = (event) => {
+  if (ref.modal.classList.contains("is-open")) {
+    const currentImgSourse = ref.modalImage.getAttribute("src");
+    const currentIndex = galleryItems.indexOf(
+      galleryItems.find((item) => item.original === currentImgSourse)
+    );
+    if (event.code === "ArrowRight") leafRight(currentIndex);
+    if (event.code === "ArrowLeft") leafLeft(currentIndex);
+  }
+};
+const leafRight = (currentIndex) => {
+  if (currentIndex === galleryItems.length - 1) return;
+  const nextImgSourse = galleryItems[currentIndex + 1].original;
+  ref.modalImage.setAttribute("src", nextImgSourse);
+};
+const leafLeft = (currentIndex) => {
+  if (currentIndex === 0) return;
+  const previousImgSourse = galleryItems[currentIndex - 1].original;
+  ref.modalImage.setAttribute("src", previousImgSourse);
+};
+
 ref.gallery.addEventListener("click", getBigImage);
 ref.closeBtn.addEventListener("click", closeModal);
 ref.overlay.addEventListener("click", closeModal);
+document.addEventListener("keydown", closeModalByEscape);
+document.addEventListener("keydown", leafImages);
