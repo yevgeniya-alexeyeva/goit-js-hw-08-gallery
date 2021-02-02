@@ -26,24 +26,15 @@ const clearModalImgSrc = (bigImageURL) => {
     ref.modalImage.setAttribute("src", "");
 };
 
-galleryItems.map((galleryItem) => {
-  ref.gallery.insertAdjacentHTML(
-    "beforeend",
-    `<li class="gallery__item">
-<a
-  class="gallery__link"
-  href="${galleryItem.original}"
->
-  <img
-    class="gallery__image"
-    src="${galleryItem.preview}"
-    data-source="${galleryItem.original}"
-    alt="${galleryItem.description}"
-  />
-</a>
-</li>`
-  );
-});
+const galleryItemsString = galleryItems
+  .map(
+    (galleryItem) =>
+      `<li class="gallery__item"><a class="gallery__link" href="${galleryItem.original}"><img class="gallery__image" src="${galleryItem.preview}" data-source="${galleryItem.original}" alt="${galleryItem.description}"/></a></li>`
+  )
+  .join("");
+console.log(galleryItemsString);
+ref.gallery.insertAdjacentHTML("beforeend", galleryItemsString);
+
 const getBigImage = (event) => {
   event.preventDefault();
   const target = event.target;
